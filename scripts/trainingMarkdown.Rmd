@@ -1,0 +1,39 @@
+---
+title: "proposal"
+author: "Minh Nguyen"
+date: "10/18/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+```
+
+Import the training set
+```{r}
+training <- read.csv("../../Election and Tweets/10172020training.csv")
+```
+
+```{r}
+boxplot(training$retweets ~ training$candidate)
+
+boxplot(training$favorites ~ training$candidate)
+
+boxplot(training$length ~ training$candidate)
+
+training %>%
+  filter(candidate == "Trump") -> df.trump
+
+mean(df.trump$retweets)
+mean(df.trump$favorites)
+
+training %>%
+  filter(candidate == "Biden") -> df.biden
+
+mean(df.biden$retweets)
+mean(df.biden$favorites)
+
+# Based on this it looks like Biden gets more retweets and favorites.
+```

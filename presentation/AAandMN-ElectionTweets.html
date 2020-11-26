@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>AAandMN-ElectionTweets.utf8</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/css/theme/black.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <link href="AAandMN-ElectionTweets_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="AAandMN-ElectionTweets_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="election-and-tweets" class="title-slide slide level1"><h1>2020 Election and Tweets</h1><p>Aliya Alimujiang and Minh Nguyen <br></br> <img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-1-1.png" width="768" style="display: block; margin: auto;" /></p></section>
+<section><section id="background" class="title-slide slide level1"><h1>Background</h1><p>What are tweets telling us about the #2020Elections? <br></br> <img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p></section><section id="popularity-of-social-media" class="slide level2">
+<h2>Popularity of Social Media</h2>
+<ul>
+<li>A channel for political speeches/posts
+<ul>
+<li>How can we analyze these text and make prediction?</li>
+</ul></li>
+<li>Text analytics and sentiment analysis
+<ul>
+<li>Misinformation and Disinformation (AI - GPT2 and recently GPT3)</li>
+</ul></li>
+<li>Goal: Predict the election results using tweets scraped from Twitter.
+<ul>
+<li>More specifically, sentiment analysis</li>
+</ul></li>
+<li>Compare results with the real election results</li>
+<li>Gallup Economy Tops Voters’ List of Key Election Issues</li>
+</ul>
+</section></section>
+<section><section id="data-mining-and-processing" class="title-slide slide level1"><h1>Data Mining and Processing</h1><ul>
+<li>Tweets were scraped from Twitter using API and R</li>
+<li>11,000 tweets between 10/17 - 10/27 were pulled from Twitter
+<ul>
+<li>Definitive hashtags: biden2020, BidenHarris2020, trump2020, TrumpPence2020</li>
+<li>Training (70%) / Testing (30%) sets</li>
+</ul></li>
+<li>Using sentiments, we attempt to classify whether the user will vote for Trump or Biden</li>
+</ul></section><section id="descriptive-analytics" class="slide level2">
+<h2>Descriptive Analytics</h2>
+<h2>
+Favorites and Retweets
+</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="descriptive-analytics-1" class="slide level2">
+<h2>Descriptive Analytics</h2>
+<h2>
+Sentiments
+</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="descriptive-analytics-2" class="slide level2">
+<h2>Descriptive Analytics</h2>
+<h2>
+Correlation Matrix
+</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section></section>
+<section><section id="variable-selection" class="title-slide slide level1"><h1>Variable selection</h1><ul>
+<li>Best Subset Selections</li>
+<li>Forward and Backward</li>
+</ul></section><section id="best-subset-selections" class="slide level2">
+<h2>Best Subset Selections</h2>
+<ul>
+<li>The plot after 9 curve flattens</li>
+<li>We started with best subset model: 9 or 10 variables seem to work best. <img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></li>
+</ul>
+</section><section id="forward-and-backward" class="slide level2">
+<h2>Forward and Backward</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section></section>
+<section><section id="models" class="title-slide slide level1"><h1>Models</h1><ul>
+<li>Generalized Linear Model</li>
+<li>Classification Model</li>
+<li>Random Forest</li>
+</ul></section><section id="generalized-linear-model" class="slide level2">
+<h2>Generalized linear model</h2>
+<ul>
+<li>We correctly classified 2599 for Biden and 2410 for Trump <br></br></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">0</th>
+<th style="text-align: right;">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td style="text-align: center;">2410</td>
+<td style="text-align: right;">1610</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td style="text-align: center;">1769</td>
+<td style="text-align: right;">2599</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<ul>
+<li>Classification Rate is 59.72% and Error Rate is 40.28% (a little better than coin toss) <br></br></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Accuracy Rate</th>
+<th>Error Rate</th>
+<th>Sensitivity</th>
+<th>Specificity</th>
+<th>False Positives</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5971626</td>
+<td>0.4028374</td>
+<td>0.6174863</td>
+<td>0.5766930</td>
+<td>0.4233070</td>
+</tr>
+</tbody>
+</table>
+</section><section id="classification-tree" class="slide level2">
+<h2>Classification Tree</h2>
+<ul>
+<li>Positive appears to be the most important predictor</li>
+<li>Good for interpretation but low test MSE = 0.4</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Accuracy Rate</th>
+<th>Error Rate</th>
+<th>Sensitivity</th>
+<th>Specificity</th>
+<th>False Positives</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5983548</td>
+<td>0.4016452</td>
+<td>0.5675366</td>
+<td>0.6318408</td>
+<td>0.3681592</td>
+</tr>
+</tbody>
+</table>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="random-forest" class="slide level2">
+<h2>Random Forest</h2>
+</section></section>
+<section id="predicitng-new-data" class="title-slide slide level1"><h1>Predicitng new data</h1><p>Results - How did they compare with actual result?</p></section>
+<section><section id="conclusion" class="title-slide slide level1"><h1>Conclusion</h1><p>Talk about challenges</p></section><section id="q-a" class="slide level2">
+<h2>Q &amp; A</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section></section>
+<section id="references" class="title-slide slide level1"><h1>References</h1><ul>
+<li>Twitter</li>
+<li>Gallup (October 5, 2020) Economy Tops Voters’ List of Key Election Issues <a href="https://news.gallup.com/poll/321617/economy-tops-voters-list-key-election-issues.aspx" class="uri">https://news.gallup.com/poll/321617/economy-tops-voters-list-key-election-issues.aspx</a></li>
+</ul></section>
+<section><section id="appendix-1-twitter" class="title-slide slide level1"><h1>Appendix 1 Twitter</h1></section><section id="raw-tweets" class="slide level2">
+<h2>Raw Tweets</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="sentiment-table" class="slide level2">
+<h2>Sentiment Table</h2>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        menu: {
+          custom: false,
+          themes: false,
+          transitions: false
+        },
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/plugin/search/search.js', async: true },
+          { src: 'AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'AAandMN-ElectionTweets_files/reveal.js-3.3.0.1/plugin/menu/menu.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

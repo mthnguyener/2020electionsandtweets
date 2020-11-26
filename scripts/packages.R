@@ -1,0 +1,28 @@
+library(tidyverse)
+library(tibble)
+library(purrr)
+library(stringr)
+library(lubridate)
+library(tree)
+library(dplyr)
+library(tidytext)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(Hmisc) # not needed
+library(cluster)
+library(DMwR)
+library(ggdendro)
+library(arules)
+
+library(twitteR)
+library(devtools)
+library(usethis)
+library(keyring)
+
+key <- key_get("key")
+secret <- key_get("secret")
+atoken <- key_get("atoken")
+asecret <- key_get("asecret")
+
+setup_twitter_oauth(key, secret, atoken, asecret)

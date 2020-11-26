@@ -1,0 +1,333 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    center: true
+    transition: fade
+    self_contained: false
+    reveal_plugins: ["search", "zoom", "menu"]
+    reveal_options:
+    theme: black
+    menu:
+      numbers: true
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align="center")
+
+library(tidyverse)
+library(leaps)
+library(ggplot2)
+library(cowplot)
+library(shiny)
+library(shinythemes)
+library(png)
+library(tree)
+library(corrplot)
+
+raw.training <- read.csv("../data/raw_training.csv") %>%
+  mutate(candidate = as.factor(candidate)) %>%
+  select(1:9)
+
+sent.training <- read.csv("../data/sent_training.csv") %>%
+  mutate(name = candidate,
+         candidate=as.factor(case_when(candidate == "Biden" ~ 1,
+    candidate == "Trump" ~ 0))) %>%
+  select(name, candidate, favorites, retweets,anticipation, sadness, fear, joy,
+         positive, surprise, trust, anger, disgust, negative)
+```
+
+# 2020 Election and Tweets
+
+Aliya Alimujiang and Minh Nguyen
+<br></br>
+```{r}
+img <- readPNG("../app/www/trvsbi.png")
+grid::grid.raster(img)
+```
+
+# Background
+ 
+What are tweets telling us about the #2020Elections?
+<br></br>
+```{r fig.asp=0.28}
+img <- readPNG("../app/www/tvbbanner.png")
+grid::grid.raster(img)
+```
+
+## Popularity of Social Media
+
+- A channel for political speeches/posts
+  - How can we analyze these text and make prediction?
+- Text analytics and sentiment analysis
+  - Misinformation and Disinformation (AI - GPT2 and recently GPT3)
+- Goal: Predict the election results using tweets scraped from Twitter.
+  - More specifically, sentiment analysis
+- Compare results with the real election results
+- Gallup Economy Tops Voters' List of Key Election Issues
+
+# Data Mining and Processing
+
+- Tweets were scraped from Twitter using API and R
+- 11,000 tweets between 10/17 - 10/27 were pulled from Twitter
+  - Definitive hashtags: biden2020, BidenHarris2020, trump2020, TrumpPence2020
+  - Training (70%) / Testing (30%) sets
+- Using sentiments, we attempt to classify whether the user will vote for Trump or Biden
+
+## Descriptive Analytics 
+
+<h2>Favorites and Retweets</h2>
+
+```{r}
+plot1 <- sent.training %>%
+  ggplot(aes(x=name, y=log(favorites))) +
+  geom_boxplot(aes(fill=name)) +
+  scale_fill_manual(values = c("Biden" = "blue",
+                               "Trump" = "red"))
+
+plot2 <- sent.training %>%
+  ggplot(aes(x=name, y=log(retweets))) +
+  geom_boxplot(show.legend = F, aes(fill=name)) +
+  scale_fill_manual(values = c("Biden" = "blue",
+                               "Trump" = "red"))
+
+plot_grid(plot1, plot2)
+```
+
+## Descriptive Analytics
+<h2>Sentiments</h2>
+
+```{r}
+sent.plot <- sent.training %>%
+  group_by(name) %>%
+  pivot_longer(c(5:14), names_to = "sentiment", values_to = "count") %>%
+  select(name, sentiment, count)
+
+sent.plot %>%
+  ggplot(aes(x=count, color=name)) + 
+    geom_histogram(bins = 10, aes(fill=name)) + 
+    facet_wrap(~sentiment, scales = 'free_x') +
+    scale_fill_manual(values = c("Biden" = "blue",
+                               "Trump" = "red"))
+```
+
+## Descriptive Analytics
+<h2>Correlation Matrix</h2>
+
+```{r}
+sent.training %>%
+  mutate(candidate = as.numeric(candidate)) %>%
+  select(-name, -favorites, -retweets) -> df
+M <- cor(df)
+corrplot(M, method="number")
+```
+
+# Variable selection
+
+- Best Subset Selections
+- Forward and Backward
+
+## Best Subset Selections
+
+- The plot after 9 curve flattens
+- We started with best subset model: 9 or 10 variables seem to work best.
+```{r}
+reg.fit <- regsubsets(candidate ~ . - name - favorites - retweets, nvmax=10,
+                     data=sent.training)
+
+par(mfrow=c(1,3))
+plot(summary(reg.fit)$cp, main="Cp"); lines(summary(reg.fit)$cp)
+plot(summary(reg.fit)$bic, main="BIC"); lines(summary(reg.fit)$bic)
+plot(summary(reg.fit)$adjr2, main="ADJUSTED R-SQUARE"); lines(summary(reg.fit)$adjr2)
+```
+
+## Forward and Backward
+
+```{r}
+# forward
+reg.fit.fwd <- regsubsets(candidate ~ . - name - favorites - retweets, data = sent.training,
+                          nvmax=10, method = "forward")
+par(mfrow=c(1,2))
+plot(reg.fit.fwd)
+plot(reg.fit.fwd, scale = "adjr2")
+
+# backward
+reg.fit.bwd <- regsubsets(candidate ~ . - name - favorites - retweets, data = sent.training,
+                          nvmax=20, method = "backward")
+
+par(mfrow=c(1,2))
+plot(reg.fit.bwd)
+plot(reg.fit.bwd, scale = "adjr2")
+```
+
+# Models
+
+- Generalized Linear Model
+- Classification Model
+- Random Forest
+
+## Generalized linear model
+
+- We correctly classified 2599 for Biden and 2410 for Trump
+<br></br>
+
+|          | 0           | 1  |
+|---------------|:-------------:|------:|
+| 0    | 2410 | 1610 |
+| 1      | 1769 | 2599 |
+<br></br>
+
+- Classification Rate is 59.72% and Error Rate is 40.28% (a little better than coin toss)
+<br></br>
+
+| Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
+|---------------|---------------|---------------|---------------|---------------|
+| 0.5971626 | 0.4028374 | 0.6174863 | 0.5766930  | 0.4233070 |
+
+```{r}
+attach(sent.training)
+
+set.seed(1)
+
+n <- length(candidate)
+Z <- sample(1:nrow(sent.training), 0.7*nrow(sent.training))
+glm.fit <- glm(candidate ~ . - name - favorites - retweets, data=sent.training[Z,],
+               family=binomial)
+
+Probability <- predict(glm.fit, sent.training[-Z,], type="response")
+Predicted.Direction <- rep("0",length(Probability))
+Predicted.Direction[ Probability > 0.5 ] = "1"
+
+glm.acc <- mean(candidate[-Z] == Predicted.Direction)
+glm.mse <- mean(candidate[-Z] != Predicted.Direction)
+
+glm.table <- table(candidate[-Z],Predicted.Direction)
+
+Tot <- sum(glm.table)
+TruN <- glm.table[1,1]
+TruP <- glm.table[2,2]
+FalN <- glm.table[1,2]
+FalP <- glm.table[2,1]
+TotN <- glm.table[1,1] + glm.table[2,1]
+TotP <- glm.table[1,2] + glm.table[2,2]
+Accuracy.Rate <- (TruN + TruP) / Tot
+Error.Rate <- (FalN + FalP) / Tot
+Sensitivity <- TruP / TotP
+Specificity <- TruN / TotN
+FalP.Rate <- 1 - Specificity
+glm.conf <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
+                   "Sensitivity"=Sensitivity, "Specificity"=Specificity,
+                   "False Positives"=FalP.Rate)
+```
+
+## Classification Tree
+
+- Positive appears to be the most important predictor
+- Good for interpretation but low test MSE = 0.4
+
+| Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
+|---------------|---------------|---------------|---------------|---------------|
+| 0.5983548 | 0.4016452 | 0.5675366 | 0.6318408 | 0.3681592 |
+```{r}
+attach(sent.training)
+
+set.seed(1)
+
+n <- length(candidate)
+
+Z <- sample(1:nrow(sent.training), 0.7*nrow(sent.training))
+
+train.tree <- tree(candidate ~ . - name - favorites - retweets, data=sent.training[Z,])
+
+candidate.predict <- predict(train.tree, sent.training, type = "class")
+confmat <- table(candidate.predict[-Z], candidate[-Z])
+cv.mse <- mean(candidate.predict[-Z] != candidate[-Z])
+
+Tot <- sum(confmat)
+TruN <- confmat[1,1]
+TruP <- confmat[2,2]
+FalN <- confmat[1,2]
+FalP <- confmat[2,1]
+TotN <- confmat[1,1] + confmat[2,1]
+TotP <- confmat[1,2] + confmat[2,2]
+Accuracy.Rate <- (TruN + TruP) / Tot
+Error.Rate <- (FalN + FalP) / Tot
+Sensitivity <- TruP / TotP
+Specificity <- TruN / TotN
+FalP.Rate <- 1 - Specificity
+tree.rates.50 <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
+                   "Sensitivity"=Sensitivity, "Specificity"=Specificity,
+                   "False Positives"=FalP.Rate)
+
+par(mfrow=c(1,3))
+# Using cross validation to determine the optimal complexity of a tree and the number of terminal nodes that minimizes the deviance. 
+cv <- cv.tree(train.tree)
+plot(cv)
+
+# instead of optimizing by the smallest deviance, optimize the complexity and the number of terminal nodes by the smallest misclassification error
+cv <- cv.tree(train.tree, FUN = prune.misclass)
+plot(cv)
+
+#prune the tree to the optimal size which is 3 obtained above
+tree.pruned <- prune.misclass(train.tree, best = 3)
+plot(tree.pruned)
+text(tree.pruned, pretty=0)
+```
+
+## Random Forest
+
+
+
+# Predicitng new data
+
+Results - How did they compare with actual result?
+
+# Conclusion
+
+Talk about challenges
+
+## Q & A
+
+```{r}
+img <- readPNG("../app/www/questionmark.png")
+grid::grid.raster(img)
+```
+
+# References
+
+- Twitter
+- Gallup (October 5, 2020)
+Economy Tops Voters' List of Key Election Issues
+https://news.gallup.com/poll/321617/economy-tops-voters-list-key-election-issues.aspx
+
+# Appendix 1 Twitter
+
+## Raw Tweets
+```{r}
+shinyApp(
+  ui = fluidPage(
+    theme = shinytheme("cyborg"),
+    tableOutput("raw.training")
+    ),
+  server = function(input, output){
+  output$raw.training <- renderTable({
+    raw.training[1:5,]
+  })
+  }
+)
+```
+
+## Sentiment Table
+```{r}
+shinyApp(
+  ui = fluidPage(
+    theme = shinytheme("cyborg"),
+    tableOutput("sent.training")
+    ),
+  server = function(input, output){
+  output$sent.training <- renderTable({
+    sent.training[c(1:10,27949:27958),]
+  })
+  }
+)
+```

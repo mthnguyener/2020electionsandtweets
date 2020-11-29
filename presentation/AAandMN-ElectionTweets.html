@@ -573,7 +573,7 @@ Correlation Matrix
 <h2>Classification Tree</h2>
 <ul>
 <li>Positive appears to be the most important predictor</li>
-<li>Good for interpretation but low test MSE = 0.4</li>
+<li>Good for interpretation but low test MSE = 0.4016</li>
 </ul>
 <table>
 <thead>
@@ -596,13 +596,63 @@ Correlation Matrix
 </tbody>
 </table>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
-</section><section id="random-forest" class="slide level2">
-<h2>Random Forest</h2>
+</section><section id="bagging-tree" class="slide level2">
+<h2>Bagging Tree</h2>
+<ul>
+<li>Surprise, trust, negative and positive</li>
+<li>Harder to interpret but better test MSE = 0.2817 <br></br></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Accuracy Rate</th>
+<th>Error Rate</th>
+<th>Sensitivity</th>
+<th>Specificity</th>
+<th>False Positives</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.7182880</td>
+<td>0.2817120</td>
+<td>0.7591575</td>
+<td>0.6738806</td>
+<td>0.3261194</td>
+</tr>
+</tbody>
+</table>
 </section></section>
-<section id="predicitng-new-data" class="title-slide slide level1"><h1>Predicitng new data</h1><p>Results - How did they compare with actual result?</p></section>
+<section id="predicitng-new-data" class="title-slide slide level1"><h1>Predicitng new data</h1><p>How did they compare with actual result?</p>
+<ul>
+<li>Election data from 10/27 - 11/3
+<ul>
+<li>#election2020, #2020election and #vote</li>
+</ul></li>
+<li>Actual - Biden: 51.1% and Trump: 47.2%</li>
+<li>Model selects Biden (62.32%) <br></br></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Biden</th>
+<th>Biden %</th>
+<th>Trump</th>
+<th>Trump %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>12497</td>
+<td>0.6232296</td>
+<td>7555</td>
+<td>0.3767704</td>
+</tr>
+</tbody>
+</table></section>
 <section><section id="conclusion" class="title-slide slide level1"><h1>Conclusion</h1><p>Talk about challenges</p></section><section id="q-a" class="slide level2">
 <h2>Q &amp; A</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>
 <section id="references" class="title-slide slide level1"><h1>References</h1><ul>
 <li>Twitter</li>
@@ -610,10 +660,10 @@ Correlation Matrix
 </ul></section>
 <section><section id="appendix-1-twitter" class="title-slide slide level1"><h1>Appendix 1 Twitter</h1></section><section id="raw-tweets" class="slide level2">
 <h2>Raw Tweets</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section><section id="sentiment-table" class="slide level2">
 <h2>Sentiment Table</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>
     </div>
   </div>

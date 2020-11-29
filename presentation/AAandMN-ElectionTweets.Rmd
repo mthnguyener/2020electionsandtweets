@@ -24,12 +24,20 @@ library(shinythemes)
 library(png)
 library(tree)
 library(corrplot)
+library(randomForest)
 
 raw.training <- read.csv("../data/raw_training.csv") %>%
   mutate(candidate = as.factor(candidate)) %>%
   select(1:9)
 
 sent.training <- read.csv("../data/sent_training.csv") %>%
+  mutate(name = candidate,
+         candidate=as.factor(case_when(candidate == "Biden" ~ 1,
+    candidate == "Trump" ~ 0))) %>%
+  select(name, candidate, favorites, retweets,anticipation, sadness, fear, joy,
+         positive, surprise, trust, anger, disgust, negative)
+
+sent.new <- read.csv("../data/sent_new.csv") %>%
   mutate(name = candidate,
          candidate=as.factor(case_when(candidate == "Biden" ~ 1,
     candidate == "Trump" ~ 0))) %>%
@@ -223,7 +231,7 @@ glm.conf <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
 ## Classification Tree
 
 - Positive appears to be the most important predictor
-- Good for interpretation but low test MSE = 0.4
+- Good for interpretation but low test MSE = 0.4016
 
 | Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
 |---------------|---------------|---------------|---------------|---------------|
@@ -241,7 +249,7 @@ train.tree <- tree(candidate ~ . - name - favorites - retweets, data=sent.traini
 
 candidate.predict <- predict(train.tree, sent.training, type = "class")
 confmat <- table(candidate.predict[-Z], candidate[-Z])
-cv.mse <- mean(candidate.predict[-Z] != candidate[-Z])
+cv.mse <- mean(candidate.predict[-Z] != candidate[-Z]) # 0.4016452
 
 Tot <- sum(confmat)
 TruN <- confmat[1,1]
@@ -274,13 +282,66 @@ plot(tree.pruned)
 text(tree.pruned, pretty=0)
 ```
 
-## Random Forest
+## Bagging Tree
 
+- Surprise, trust, negative and positive 
+- Harder to interpret but better test MSE =  0.2817
+<br></br>
 
+| Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
+|---------------|---------------|---------------|---------------|---------------|
+| 0.7182880 | 0.2817120 | 0.7591575 | 0.6738806 | 0.3261194 |
+```{r}
+attach(sent.training)
+
+set.seed(1)
+# Bagging 500 trees (default), with 13 predictors each, with variable importance statistics
+bag.election <- randomForest(candidate ~ . - name - favorites - retweets, 
+                           data=sent.training[Z,], mtry=10, importance=T)
+# mtry =10 uses all 10 predictors; ntree = is number of trees to fit (default is 500 trees)
+
+# Bagging Tree Predictions
+bag.pred <- predict(bag.election, newdata=sent.training) # Predict with the train model and test data
+bag.confmat <- table(bag.pred[-Z], candidate[-Z])
+bag.cv.mse <- mean(bag.pred[-Z] != candidate[-Z]) # 0.281712
+
+Tot <- sum(bag.confmat)
+TruN <- bag.confmat[1,1]
+TruP <- bag.confmat[2,2]
+FalN <- bag.confmat[1,2]
+FalP <- bag.confmat[2,1]
+TotN <- bag.confmat[1,1] + bag.confmat[2,1]
+TotP <- bag.confmat[1,2] + bag.confmat[2,2]
+Accuracy.Rate <- (TruN + TruP) / Tot
+Error.Rate <- (FalN + FalP) / Tot
+Sensitivity <- TruP / TotP
+Specificity <- TruN / TotN
+FalP.Rate <- 1 - Specificity
+bag.rates <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
+                   "Sensitivity"=Sensitivity, "Specificity"=Specificity,
+                   "False Positives"=FalP.Rate)
+```
 
 # Predicitng new data
 
-Results - How did they compare with actual result?
+How did they compare with actual result?
+
+- Election data from 10/27 - 11/3 
+  - #election2020, #2020election and #vote
+- Actual - Biden: 51.1% and Trump: 47.2%
+- Model selects Biden (62.32%)
+<br></br>
+
+| Biden | Biden % | Trump | Trump % |
+|---------------|---------------|---------------|---------------|
+| 12497 | 0.6232296 | 7555 | 0.3767704 |
+```{r}
+bag.pred <- predict(bag.election, newdata=sent.new)
+df.pred <- as.data.frame(bag.pred)
+
+results <- c("Biden"=length(which(df.pred$bag.pred==1)),
+             "Trump"=length(which(df.pred$bag.pred==0)))
+```
 
 # Conclusion
 

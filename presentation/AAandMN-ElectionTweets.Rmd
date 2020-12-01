@@ -82,9 +82,7 @@ grid::grid.raster(img)
   - Training (70%) / Testing (30%) sets
 - Using sentiments, we attempt to classify whether the user will vote for Trump or Biden
 
-## Descriptive Analytics 
-
-<h2>Favorites and Retweets</h2>
+## Favorites and Retweets
 
 ```{r}
 plot1 <- sent.training %>%
@@ -102,8 +100,7 @@ plot2 <- sent.training %>%
 plot_grid(plot1, plot2)
 ```
 
-## Descriptive Analytics
-<h2>Sentiments</h2>
+## Sentiments
 
 ```{r}
 sent.plot <- sent.training %>%
@@ -119,8 +116,7 @@ sent.plot %>%
                                "Trump" = "red"))
 ```
 
-## Descriptive Analytics
-<h2>Correlation Matrix</h2>
+## Correlation Matrix
 
 ```{r}
 sent.training %>%
@@ -171,12 +167,12 @@ plot(reg.fit.bwd, scale = "adjr2")
 # Models
 
 - Generalized Linear Model
-- Classification Model
-- Random Forest
+- Classification Tree
+- Bagging
 
 ## Generalized linear model
 
-- We correctly classified 2599 for Biden and 2410 for Trump
+- We correctly classified 2,599 for Biden and 2,410 for Trump
 <br></br>
 
 |          | 0           | 1  |
@@ -185,7 +181,7 @@ plot(reg.fit.bwd, scale = "adjr2")
 | 1      | 1769 | 2599 |
 <br></br>
 
-- Classification Rate is 59.72% and Error Rate is 40.28% (a little better than coin toss)
+- Classification Rate is 60% and Error Rate is 40% (a little better than coin toss)
 <br></br>
 
 | Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
@@ -282,11 +278,9 @@ plot(tree.pruned)
 text(tree.pruned, pretty=0)
 ```
 
-## Bagging Tree
+## Bagging
 
-- Surprise, trust, negative and positive 
 - Harder to interpret but better test MSE =  0.2817
-<br></br>
 
 | Accuracy Rate | Error Rate | Sensitivity | Specificity | False Positives |
 |---------------|---------------|---------------|---------------|---------------|
@@ -298,7 +292,11 @@ set.seed(1)
 # Bagging 500 trees (default), with 13 predictors each, with variable importance statistics
 bag.election <- randomForest(candidate ~ . - name - favorites - retweets, 
                            data=sent.training[Z,], mtry=10, importance=T)
+
 # mtry =10 uses all 10 predictors; ntree = is number of trees to fit (default is 500 trees)
+par(mfrow=c(1,2))
+varImpPlot(bag.election)
+importance(bag.election)
 
 # Bagging Tree Predictions
 bag.pred <- predict(bag.election, newdata=sent.training) # Predict with the train model and test data
@@ -324,12 +322,10 @@ bag.rates <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
 
 # Predicitng new data
 
-How did they compare with actual result?
-
 - Election data from 10/27 - 11/3 
   - #election2020, #2020election and #vote
-- Actual - Biden: 51.1% and Trump: 47.2%
-- Model selects Biden (62.32%)
+- Model selects Biden (62.32% out of 20052)
+  - Actual Results: Biden (51.1%) and Trump (47.2%)
 <br></br>
 
 | Biden | Biden % | Trump | Trump % |
@@ -345,7 +341,10 @@ results <- c("Biden"=length(which(df.pred$bag.pred==1)),
 
 # Conclusion
 
-Talk about challenges
+- Challenges:
+  - Data Selection (which #?)
+  - Approach: Keywords vs Sentinments
+- Results: Actual (Biden: 51.1%) vs Model (Biden 62.32%)
 
 ## Q & A
 

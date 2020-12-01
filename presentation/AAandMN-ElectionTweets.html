@@ -483,23 +483,14 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Training (70%) / Testing (30%) sets</li>
 </ul></li>
 <li>Using sentiments, we attempt to classify whether the user will vote for Trump or Biden</li>
-</ul></section><section id="descriptive-analytics" class="slide level2">
-<h2>Descriptive Analytics</h2>
-<h2>
-Favorites and Retweets
-</h2>
+</ul></section><section id="favorites-and-retweets" class="slide level2">
+<h2>Favorites and Retweets</h2>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
-</section><section id="descriptive-analytics-1" class="slide level2">
-<h2>Descriptive Analytics</h2>
-<h2>
-Sentiments
-</h2>
+</section><section id="sentiments" class="slide level2">
+<h2>Sentiments</h2>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
-</section><section id="descriptive-analytics-2" class="slide level2">
-<h2>Descriptive Analytics</h2>
-<h2>
-Correlation Matrix
-</h2>
+</section><section id="correlation-matrix" class="slide level2">
+<h2>Correlation Matrix</h2>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>
 <section><section id="variable-selection" class="title-slide slide level1"><h1>Variable selection</h1><ul>
@@ -517,12 +508,12 @@ Correlation Matrix
 </section></section>
 <section><section id="models" class="title-slide slide level1"><h1>Models</h1><ul>
 <li>Generalized Linear Model</li>
-<li>Classification Model</li>
-<li>Random Forest</li>
+<li>Classification Tree</li>
+<li>Bagging</li>
 </ul></section><section id="generalized-linear-model" class="slide level2">
 <h2>Generalized linear model</h2>
 <ul>
-<li>We correctly classified 2599 for Biden and 2410 for Trump <br></br></li>
+<li>We correctly classified 2,599 for Biden and 2,410 for Trump <br></br></li>
 </ul>
 <table>
 <thead>
@@ -547,7 +538,7 @@ Correlation Matrix
 </table>
 <p><br></br></p>
 <ul>
-<li>Classification Rate is 59.72% and Error Rate is 40.28% (a little better than coin toss) <br></br></li>
+<li>Classification Rate is 60% and Error Rate is 40% (a little better than coin toss) <br></br></li>
 </ul>
 <table>
 <thead>
@@ -596,11 +587,10 @@ Correlation Matrix
 </tbody>
 </table>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
-</section><section id="bagging-tree" class="slide level2">
-<h2>Bagging Tree</h2>
+</section><section id="bagging" class="slide level2">
+<h2>Bagging</h2>
 <ul>
-<li>Surprise, trust, negative and positive</li>
-<li>Harder to interpret but better test MSE = 0.2817 <br></br></li>
+<li>Harder to interpret but better test MSE = 0.2817</li>
 </ul>
 <table>
 <thead>
@@ -622,15 +612,28 @@ Correlation Matrix
 </tr>
 </tbody>
 </table>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>##                      0         1 MeanDecreaseAccuracy MeanDecreaseGini
+## anticipation  72.31672  69.36139             164.8482         553.0815
+## sadness       80.26351 118.89472             186.5874         313.0333
+## fear         102.38393  55.79586             151.6950         426.8393
+## joy          124.22504  65.70928             169.5625         386.2367
+## positive     100.99737  90.60066             237.4569         686.9071
+## surprise      90.45728  73.74885             281.3582         446.0626
+## trust        112.43608  78.41566             257.8224         595.6363
+## anger         34.35517  56.45817             103.9335         330.8331
+## disgust       74.15067  53.85452             111.6349         263.1480
+## negative     142.28813  72.39467             251.5212         607.5777</code></pre>
 </section></section>
-<section id="predicitng-new-data" class="title-slide slide level1"><h1>Predicitng new data</h1><p>How did they compare with actual result?</p>
-<ul>
+<section id="predicitng-new-data" class="title-slide slide level1"><h1>Predicitng new data</h1><ul>
 <li>Election data from 10/27 - 11/3
 <ul>
 <li>#election2020, #2020election and #vote</li>
 </ul></li>
-<li>Actual - Biden: 51.1% and Trump: 47.2%</li>
-<li>Model selects Biden (62.32%) <br></br></li>
+<li>Model selects Biden (62.32% out of 20052)
+<ul>
+<li>Actual Results: Biden (51.1%) and Trump (47.2%) <br></br></li>
+</ul></li>
 </ul>
 <table>
 <thead>
@@ -650,7 +653,14 @@ Correlation Matrix
 </tr>
 </tbody>
 </table></section>
-<section><section id="conclusion" class="title-slide slide level1"><h1>Conclusion</h1><p>Talk about challenges</p></section><section id="q-a" class="slide level2">
+<section><section id="conclusion" class="title-slide slide level1"><h1>Conclusion</h1><ul>
+<li>Challenges:
+<ul>
+<li>Data Selection (which #?)</li>
+<li>Approach: Keywords vs Sentinments</li>
+</ul></li>
+<li>Results: Actual (Biden: 51.1%) vs Model (Biden 62.32%)</li>
+</ul></section><section id="q-a" class="slide level2">
 <h2>Q &amp; A</h2>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>

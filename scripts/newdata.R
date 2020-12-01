@@ -1,4 +1,4 @@
-# Working file
+# Setting Up
 
 setup_twitter_oauth(key, secret, atoken, asecret)
 

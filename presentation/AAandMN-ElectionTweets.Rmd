@@ -82,6 +82,14 @@ grid::grid.raster(img)
   - Training (70%) / Testing (30%) sets
 - Using sentiments, we attempt to classify whether the user will vote for Trump or Biden
 
+## Hypothesis
+
+$H_0: All \ \beta's = 0$
+
+$H_1: At \ least \ one \ \beta's \ne 0$
+
+If $H_1:$ is True then we can use the model to make a prediction
+
 ## Favorites and Retweets
 
 ```{r}
@@ -170,7 +178,7 @@ plot(reg.fit.bwd, scale = "adjr2")
 - Classification Tree
 - Bagging
 
-## Generalized linear model
+## Generalized linear model 1
 
 - We correctly classified 2,599 for Biden and 2,410 for Trump
 <br></br>
@@ -222,6 +230,14 @@ FalP.Rate <- 1 - Specificity
 glm.conf <- c("Accuracy Rate"=Accuracy.Rate, "Error Rate"=Error.Rate,
                    "Sensitivity"=Sensitivity, "Specificity"=Specificity,
                    "False Positives"=FalP.Rate)
+```
+
+## GLM Summary
+
+- Except for digust, all variables appear to be significant
+
+```{r}
+summary(glm.fit)
 ```
 
 ## Classification Tree

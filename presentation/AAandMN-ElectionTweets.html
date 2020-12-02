@@ -483,7 +483,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Training (70%) / Testing (30%) sets</li>
 </ul></li>
 <li>Using sentiments, we attempt to classify whether the user will vote for Trump or Biden</li>
-</ul></section><section id="favorites-and-retweets" class="slide level2">
+</ul></section><section id="hypothesis" class="slide level2">
+<h2>Hypothesis</h2>
+<p><span class="math inline">\(H_0: All \ \beta&#39;s = 0\)</span> <span class="math inline">\(H_1: At \ least \ one \ \beta&#39;s \ne 0\)</span></p>
+<p>If <span class="math inline">\(H_1:\)</span> is True then we should be able to predict</p>
+</section><section id="favorites-and-retweets" class="slide level2">
 <h2>Favorites and Retweets</h2>
 <p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section><section id="sentiments" class="slide level2">
@@ -510,8 +514,8 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Generalized Linear Model</li>
 <li>Classification Tree</li>
 <li>Bagging</li>
-</ul></section><section id="generalized-linear-model" class="slide level2">
-<h2>Generalized linear model</h2>
+</ul></section><section id="generalized-linear-model-1" class="slide level2">
+<h2>Generalized linear model 1</h2>
 <ul>
 <li>We correctly classified 2,599 for Biden and 2,410 for Trump <br></br></li>
 </ul>
@@ -560,6 +564,43 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </tr>
 </tbody>
 </table>
+</section><section id="glm-summary" class="slide level2">
+<h2>GLM Summary</h2>
+<ul>
+<li>Except for digust, all variables appear to be significant</li>
+</ul>
+<pre><code>## 
+## Call:
+## glm(formula = candidate ~ . - name - favorites - retweets, family = binomial, 
+##     data = sent.training[Z, ])
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2884  -1.1210   0.6955   1.1169   1.9027  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -0.340287   0.026563 -12.811  &lt; 2e-16 ***
+## anticipation  0.265392   0.027611   9.612  &lt; 2e-16 ***
+## sadness       0.449556   0.034867  12.893  &lt; 2e-16 ***
+## fear         -0.170233   0.030261  -5.626 1.85e-08 ***
+## joy          -0.550837   0.034735 -15.858  &lt; 2e-16 ***
+## positive      0.533631   0.021893  24.375  &lt; 2e-16 ***
+## surprise      0.206145   0.026058   7.911 2.55e-15 ***
+## trust        -0.211719   0.027501  -7.699 1.37e-14 ***
+## anger         0.266274   0.036494   7.296 2.96e-13 ***
+## disgust       0.006107   0.043007   0.142    0.887    
+## negative     -0.237686   0.026870  -8.846  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 27100  on 19569  degrees of freedom
+## Residual deviance: 25706  on 19559  degrees of freedom
+## AIC: 25728
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
 </section><section id="classification-tree" class="slide level2">
 <h2>Classification Tree</h2>
 <ul>
@@ -586,7 +627,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </tr>
 </tbody>
 </table>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section><section id="bagging" class="slide level2">
 <h2>Bagging</h2>
 <ul>
@@ -612,7 +653,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </tr>
 </tbody>
 </table>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre><code>##                      0         1 MeanDecreaseAccuracy MeanDecreaseGini
 ## anticipation  72.31672  69.36139             164.8482         553.0815
 ## sadness       80.26351 118.89472             186.5874         313.0333
@@ -662,7 +703,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Results: Actual (Biden: 51.1%) vs Model (Biden 62.32%)</li>
 </ul></section><section id="q-a" class="slide level2">
 <h2>Q &amp; A</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>
 <section id="references" class="title-slide slide level1"><h1>References</h1><ul>
 <li>Twitter</li>
@@ -670,10 +711,10 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul></section>
 <section><section id="appendix-1-twitter" class="title-slide slide level1"><h1>Appendix 1 Twitter</h1></section><section id="raw-tweets" class="slide level2">
 <h2>Raw Tweets</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section><section id="sentiment-table" class="slide level2">
 <h2>Sentiment Table</h2>
-<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="AAandMN-ElectionTweets_files/figure-revealjs/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section></section>
     </div>
   </div>
